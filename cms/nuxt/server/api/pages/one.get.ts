@@ -56,7 +56,13 @@ const pageFields = [
 						'description',
 						'layout',
 						'image',
-						'images_multi',
+						{
+							images_multi: [
+								{
+									directus_files_id: ['id'],
+								},
+							],
+						},
 						{
 							translations_hero: [
 								'languages_code',

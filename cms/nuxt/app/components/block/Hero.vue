@@ -48,7 +48,10 @@ const translatedContent = computed(() => {
 // Use images_multi if available, otherwise fallback to single image
 const carouselImages = computed(() => {
 	if (props.data.images_multi && props.data.images_multi.length > 0) {
-		return props.data.images_multi;
+		// Extract file IDs from the M2M junction table structure
+		return props.data.images_multi
+			.map((item: any) => item.directus_files_id?.id)
+			.filter((id: string | undefined) => id !== undefined);
 	}
 	return props.data.image ? [props.data.image] : [];
 });
