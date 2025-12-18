@@ -2,7 +2,7 @@
 const { locale, locales, setLocale } = useI18n();
 
 const currentLanguage = computed(() => {
-	return locales.value.find((l) => l.code === locale.value);
+	return locales.find((l) => l.code === locale.value);
 });
 
 const isOpen = ref(false);
