@@ -1,13 +1,13 @@
-export const useI18n = () => {
-	const locales = [
-		{ code: 'en-US', name: 'English', flag: '🇺🇸' },
-		{ code: 'de-DE', name: 'German', flag: '🇩🇪' },
-		{ code: 'es-ES', name: 'Spanish', flag: '🇪🇸' },
-		{ code: 'it-IT', name: 'Italian', flag: '🇮🇹' },
-		{ code: 'fr-FR', name: 'French', flag: '🇫🇷' },
-		{ code: 'pt-BR', name: 'Portuguese', flag: '🇧🇷' },
-	];
+const LOCALES = [
+	{ code: 'en-US', name: 'English', flag: '🇺🇸' },
+	{ code: 'de-DE', name: 'German', flag: '🇩🇪' },
+	{ code: 'es-ES', name: 'Spanish', flag: '🇪🇸' },
+	{ code: 'it-IT', name: 'Italian', flag: '🇮🇹' },
+	{ code: 'fr-FR', name: 'French', flag: '🇫🇷' },
+	{ code: 'pt-BR', name: 'Portuguese', flag: '🇧🇷' },
+];
 
+export const useI18n = () => {
 	const locale = useState<string>('locale', () => {
 		// Initialize from localStorage on client side only
 		if (process.client) {
@@ -29,7 +29,7 @@ export const useI18n = () => {
 
 	return {
 		locale,
-		locales,
+		locales: LOCALES,
 		setLocale,
 	};
 };
