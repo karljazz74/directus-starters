@@ -21,6 +21,7 @@ interface Navigation {
 interface Globals {
 	logo?: string;
 	logo_dark_mode?: string;
+	logo_size?: number;
 }
 
 const props = defineProps<{
@@ -37,6 +38,8 @@ const lightLogoUrl = computed(() =>
 );
 
 const darkLogoUrl = computed(() =>
+
+// Calculate logo width based on logo_size slider (0-100)\n// Base width is 120px. logo_size 100 = 2x size (240px), logo_size 50 = 1x (120px), logo_size 0 = 0x (0px)\nconst logoWidth = computed(() => {\n\tconst baseWidth = 120;\n\tconst sizeValue = props.globals?.logo_size ?? 50; // Default to 50 (1x)\n\tconst multiplier = sizeValue / 50; // 50 = 1x, 100 = 2x, 0 = 0x\n\treturn baseWidth * multiplier;\n});
 	props.globals?.logo_dark_mode ? `${runtimeConfig.public.directusUrl}/assets/${props.globals.logo_dark_mode}` : '',
 );
 
@@ -49,7 +52,7 @@ const handleLinkClick = () => {
 	<header ref="navigationRef" class="sticky top-0 z-50 w-full bg-background text-foreground">
 		<Container class="flex items-center justify-between p-4">
 			<NuxtLink to="/" class="flex-shrink-0">
-				<img :src="lightLogoUrl" alt="Logo" class="w-[120px] h-auto dark:hidden" width="150" height="100" />
+				<img :src="lightLogoUrl" alt="Logo" class="h-auto dark:hidden" :style="{ width: `${logoWidth}px` }" width="150" height="100" />
 				<img
 					v-if="darkLogoUrl"
 					:src="darkLogoUrl"

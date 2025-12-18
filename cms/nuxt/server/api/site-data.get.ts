@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
 		const [globals, headerNavigation, footerNavigation] = await Promise.all([
 			directusServer.request(
 				readSingleton('globals', {
-					fields: ['title', 'description', 'logo', 'logo_dark_mode', 'social_links', 'accent_color', 'favicon'],
+					fields: ['title', 'description', 'logo', 'logo_dark_mode', 'logo_size', 'social_links', 'accent_color', 'favicon'],
 				}),
 			),
 			directusServer.request(
