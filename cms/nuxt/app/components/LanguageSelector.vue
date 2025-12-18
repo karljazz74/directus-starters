@@ -2,7 +2,7 @@
 const LOCALES = [
 	{ code: 'en-US', name: 'English', flag: '🇺🇸' },
 	{ code: 'de-DE', name: 'German', flag: '🇩🇪' },
-	{ code: 'es-ES', name: 'Spanish', flag: '�🇽' },
+	{ code: 'es-ES', name: 'Spanish', flag: '🇲🇽' },
 	{ code: 'it-IT', name: 'Italian', flag: '🇮🇹' },
 	{ code: 'fr-FR', name: 'French', flag: '🇫🇷' },
 	{ code: 'pt-BR', name: 'Portuguese', flag: '🇧🇷' },
