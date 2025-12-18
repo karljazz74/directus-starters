@@ -7,20 +7,22 @@ interface DirectusImageProps {
 	alt: string;
 	width?: number;
 	height?: number;
+	preset?: string;
 	[key: string]: any;
 }
 
 const props = withDefaults(defineProps<DirectusImageProps>(), {
 	width: undefined,
 	height: undefined,
+	preset: '800w',
 });
 
-const src = ref(getDirectusAssetURL(props.uuid));
+const src = ref(getDirectusAssetURL(props.uuid, props.preset));
 
 watch(
-	() => props.uuid,
-	(newUuid) => {
-		src.value = getDirectusAssetURL(newUuid);
+	() => [props.uuid, props.preset],
+	([newUuid, newPreset]) => {
+		src.value = getDirectusAssetURL(newUuid as string, newPreset as string);
 	},
 );
 </script>

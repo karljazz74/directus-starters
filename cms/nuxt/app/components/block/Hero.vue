@@ -49,11 +49,15 @@ const translatedContent = computed(() => {
 const carouselImages = computed(() => {
 	if (props.data.images_multi && props.data.images_multi.length > 0) {
 		// Extract file IDs from the M2M junction table structure
-		return props.data.images_multi
+		const images = props.data.images_multi
 			.map((item: any) => item.directus_files_id?.id)
 			.filter((id: string | undefined) => id !== undefined);
+		console.log('Carousel images:', images, 'Count:', images.length);
+		return images;
 	}
-	return props.data.image ? [props.data.image] : [];
+	const fallback = props.data.image ? [props.data.image] : [];
+	console.log('Using fallback image:', fallback);
+	return fallback;
 });
 </script>
 
