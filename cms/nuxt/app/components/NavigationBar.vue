@@ -38,10 +38,17 @@ const lightLogoUrl = computed(() =>
 );
 
 const darkLogoUrl = computed(() =>
-
-// Calculate logo width based on logo_size slider (0-100)\n// Base width is 120px. logo_size 100 = 2x size (240px), logo_size 50 = 1x (120px), logo_size 0 = 0x (0px)\nconst logoWidth = computed(() => {\n\tconst baseWidth = 120;\n\tconst sizeValue = props.globals?.logo_size ?? 50; // Default to 50 (1x)\n\tconst multiplier = sizeValue / 50; // 50 = 1x, 100 = 2x, 0 = 0x\n\treturn baseWidth * multiplier;\n});
 	props.globals?.logo_dark_mode ? `${runtimeConfig.public.directusUrl}/assets/${props.globals.logo_dark_mode}` : '',
 );
+
+// Calculate logo width based on logo_size slider (0-100)
+// Base width is 120px. logo_size 100 = 2x size (240px), logo_size 50 = 1x (120px)
+const logoWidth = computed(() => {
+	const baseWidth = 120;
+	const sizeValue = props.globals?.logo_size ?? 50; // Default to 50 (1x)
+	const multiplier = sizeValue / 50; // 50 = 1x, 100 = 2x, 0 = 0x
+	return baseWidth * multiplier;
+});
 
 const handleLinkClick = () => {
 	menuOpen.value = false;
@@ -57,7 +64,8 @@ const handleLinkClick = () => {
 					v-if="darkLogoUrl"
 					:src="darkLogoUrl"
 					alt="Logo (Dark Mode)"
-					class="w-[120px] h-auto hidden dark:block"
+					class="h-auto hidden dark:block"
+					:style="{ width: `${logoWidth}px` }"
 					width="150"
 					height="100"
 				/>

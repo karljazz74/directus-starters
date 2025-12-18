@@ -74,7 +74,7 @@ export default defineEventHandler(async (event) => {
 		]);
 
 		return { globals, headerNavigation, footerNavigation };
-	} catch {
-		throw createError({ statusCode: 500, statusMessage: 'Internal Server Error' });
+        } catch (error) {
+                console.error('Directus API Error:', error);
 	}
 });
