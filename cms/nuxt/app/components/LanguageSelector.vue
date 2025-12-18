@@ -1,16 +1,39 @@
 <script setup lang="ts">
-const { locale, locales, setLocale } = useI18n();
+const LOCALES = [
+	{ code: 'en-US', name: 'English', flag: '🇺🇸' },
+	{ code: 'de-DE', name: 'German', flag: '🇩🇪' },
+	{ code: 'es-ES', name: 'Spanish', flag: '🇪🇸' },
+	{ code: 'it-IT', name: 'Italian', flag: '🇮🇹' },
+	{ code: 'fr-FR', name: 'French', flag: '🇫🇷' },
+	{ code: 'pt-BR', name: 'Portuguese', flag: '🇧🇷' },
+];
+
+const locale = useState<string>('locale', () => 'en-US');
 
 const currentLanguage = computed(() => {
-	return locales.find((l) => l.code === locale.value);
+	return LOCALES.find((l) => l.code === locale.value) || LOCALES[0];
 });
 
 const isOpen = ref(false);
 
 const selectLanguage = (langCode: string) => {
-	setLocale(langCode);
+	locale.value = langCode;
 	isOpen.value = false;
+	// Store in localStorage if on client side
+	if (process.client) {
+		localStorage.setItem('locale', langCode);
+	}
 };
+
+// Initialize from localStorage on client side
+onMounted(() => {
+	if (process.client) {
+		const savedLocale = localStorage.getItem('locale');
+		if (savedLocale) {
+			locale.value = savedLocale;
+		}
+	}
+});
 </script>
 
 <template>
@@ -47,7 +70,7 @@ const selectLanguage = (langCode: string) => {
 			>
 				<div class="py-1">
 					<button
-						v-for="lang in locales"
+						v-for="lang in LOCALES"
 						:key="lang.code"
 						@click="selectLanguage(lang.code)"
 						class="flex items-center gap-3 w-full px-4 py-2 text-sm text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
