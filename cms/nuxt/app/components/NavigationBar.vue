@@ -73,6 +73,7 @@ const handleLinkClick = () => {
 
 			<nav class="flex items-center gap-4">
 				<SearchModal />
+				<LanguageSelector />
 				<NavigationMenu
 					class="hidden md:flex"
 					:data-directus="

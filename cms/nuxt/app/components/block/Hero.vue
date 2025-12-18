@@ -7,6 +7,12 @@ interface HeroProps {
 		description: string;
 		layout: 'image_image_left' | 'image_center' | 'image_left';
 		image: string;
+		translations?: Array<{
+			languages_code: string;
+			tagline: string;
+			headline: string;
+			description: string;
+		}>;
 		button_group?: {
 			buttons: Array<{
 				id: string;
@@ -22,7 +28,21 @@ interface HeroProps {
 }
 
 const { setAttr } = useVisualEditing();
-defineProps<HeroProps>();
+const props = defineProps<HeroProps>();
+
+// Get current language from i18n composable
+const { locale } = useI18n();
+
+// Compute translated content based on selected language
+const translatedContent = computed(() => {
+	const translation = props.data.translations?.find((t) => t.languages_code === locale.value);
+	
+	return {
+		tagline: translation?.tagline || props.data.tagline,
+		headline: translation?.headline || props.data.headline,
+		description: translation?.description || props.data.description,
+	};
+});
 </script>
 
 <template>
@@ -42,16 +62,16 @@ defineProps<HeroProps>();
 			}"
 		>
 			<Tagline
-				:tagline="data.tagline"
+				:tagline="translatedContent.tagline"
 				:data-directus="setAttr({ collection: 'block_hero', item: data.id, fields: 'tagline', mode: 'popover' })"
 			/>
 			<Headline
-				:headline="data.headline"
+				:headline="translatedContent.headline"
 				:data-directus="setAttr({ collection: 'block_hero', item: data.id, fields: 'headline', mode: 'popover' })"
 			/>
 			<Text
-				v-if="data.description"
-				:content="data.description"
+				v-if="translatedContent.description"
+				:content="translatedContent.description"
 				:data-directus="setAttr({ collection: 'block_hero', item: data.id, fields: 'description', mode: 'popover' })"
 			/>
 

@@ -57,6 +57,14 @@ const pageFields = [
 						'layout',
 						'image',
 						{
+							translations: [
+								'languages_code',
+								'tagline',
+								'headline',
+								'description',
+							],
+						},
+						{
 							button_group: [
 								'id',
 								{
