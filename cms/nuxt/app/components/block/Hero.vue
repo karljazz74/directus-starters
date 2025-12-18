@@ -122,14 +122,16 @@ const carouselImages = computed(() => {
 					arrows
 					dots
 					loop
-					:autoplay="{ delay: 4000 }"
+					:autoplay="{ delay: 2500, stopOnInteraction: false }"
 					:items="carouselImages"
 					class="w-full h-full"
 					:ui="{
 						container: 'h-full',
 						item: 'h-full',
-						prev: 'sm:start-4',
-						next: 'sm:end-4'
+						prev: 'sm:start-4 !bg-white/80 dark:!bg-gray-800/80',
+						next: 'sm:end-4 !bg-white/80 dark:!bg-gray-800/80',
+						dots: '!-bottom-8',
+						dot: '!bg-gray-400 data-[state=active]:!bg-white'
 					}"
 				>
 					<DirectusImage
