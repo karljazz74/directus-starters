@@ -107,24 +107,38 @@ const carouselImages = computed(() => {
 				'md:w-1/2 h-[562px]': data.layout !== 'image_center',
 			}"
 		>
-			<UCarousel
-				v-slot="{ item }"
-				fade
-				arrows
-				dots
-				loop
-				:autoplay="{ delay: 4000 }"
-				:items="carouselImages"
-				class="w-full h-full"
-				:ui="{
-					container: 'h-full',
-					item: 'h-full',
-					prev: 'sm:start-4',
-					next: 'sm:end-4'
-				}"
-			>
+			<ClientOnly>
+				<UCarousel
+					v-if="carouselImages.length > 1"
+					v-slot="{ item }"
+					fade
+					arrows
+					dots
+					loop
+					:autoplay="{ delay: 4000 }"
+					:items="carouselImages"
+					class="w-full h-full"
+					:ui="{
+						container: 'h-full',
+						item: 'h-full',
+						prev: 'sm:start-4',
+						next: 'sm:end-4'
+					}"
+				>
+					<DirectusImage
+						:uuid="item"
+						:alt="data.tagline || data.headline || 'Hero Image'"
+						:fill="true"
+						:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
+						class="object-contain"
+						:data-directus="
+							setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'], mode: 'modal' })
+						"
+					/>
+				</UCarousel>
 				<DirectusImage
-					:uuid="item"
+					v-else
+					:uuid="carouselImages[0]"
 					:alt="data.tagline || data.headline || 'Hero Image'"
 					:fill="true"
 					:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
@@ -133,7 +147,19 @@ const carouselImages = computed(() => {
 						setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'], mode: 'modal' })
 					"
 				/>
-			</UCarousel>
+				<template #fallback>
+					<DirectusImage
+						:uuid="carouselImages[0]"
+						:alt="data.tagline || data.headline || 'Hero Image'"
+						:fill="true"
+						:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
+						class="object-contain"
+						:data-directus="
+							setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'], mode: 'modal' })
+						"
+					/>
+				</template>
+			</ClientOnly>
 		</div>
 	</section>
 </template>
