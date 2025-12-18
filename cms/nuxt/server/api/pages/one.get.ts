@@ -57,7 +57,7 @@ const pageFields = [
 						'layout',
 						'image',
 						{
-							translations: [
+							translations_hero: [
 								'languages_code',
 								'tagline',
 								'headline',

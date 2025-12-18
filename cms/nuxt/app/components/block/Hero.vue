@@ -7,7 +7,7 @@ interface HeroProps {
 		description: string;
 		layout: 'image_image_left' | 'image_center' | 'image_left';
 		image: string;
-		translations?: Array<{
+		translations_hero?: Array<{
 			languages_code: string;
 			tagline: string;
 			headline: string;
@@ -30,12 +30,12 @@ interface HeroProps {
 const { setAttr } = useVisualEditing();
 const props = defineProps<HeroProps>();
 
-// Get current language from i18n composable
-const { locale } = useI18n();
+// Get current language - must use the same useState key as LanguageSelector
+const locale = useState<string>('locale', () => 'en-US');
 
 // Compute translated content based on selected language
 const translatedContent = computed(() => {
-	const translation = props.data.translations?.find((t) => t.languages_code === locale.value);
+	const translation = props.data.translations_hero?.find((t) => t.languages_code === locale.value);
 	
 	return {
 		tagline: translation?.tagline || props.data.tagline,
