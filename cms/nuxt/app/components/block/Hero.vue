@@ -7,6 +7,7 @@ interface HeroProps {
 		description: string;
 		layout: 'image_image_left' | 'image_center' | 'image_left';
 		image: string;
+		images_multi?: string[];
 		translations_hero?: Array<{
 			languages_code: string;
 			tagline: string;
@@ -43,6 +44,14 @@ const translatedContent = computed(() => {
 		description: translation?.description || props.data.description,
 	};
 });
+
+// Use images_multi if available, otherwise fallback to single image
+const carouselImages = computed(() => {
+	if (props.data.images_multi && props.data.images_multi.length > 0) {
+		return props.data.images_multi;
+	}
+	return props.data.image ? [props.data.image] : [];
+});
 </script>
 
 <template>
@@ -59,6 +68,7 @@ const translatedContent = computed(() => {
 			:class="{
 				'md:w-3/4 xl:w-2/3 items-center': data.layout === 'image_center',
 				'md:w-1/2 items-start': data.layout !== 'image_center',
+				'md:-mt-8': data.layout === 'image_right',
 			}"
 		>
 			<Tagline
@@ -90,23 +100,40 @@ const translatedContent = computed(() => {
 		</div>
 
 		<div
-			v-if="data.image"
+			v-if="carouselImages.length > 0"
 			class="relative w-full"
 			:class="{
 				'md:w-3/4 xl:w-2/3 h-[400px]': data.layout === 'image_center',
 				'md:w-1/2 h-[562px]': data.layout !== 'image_center',
 			}"
 		>
-			<DirectusImage
-				:uuid="data.image"
-				:alt="data.tagline || data.headline || 'Hero Image'"
-				:fill="true"
-				:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
-				class="object-contain"
-				:data-directus="
-					setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'], mode: 'modal' })
-				"
-			/>
+			<UCarousel
+				v-slot="{ item }"
+				fade
+				arrows
+				dots
+				loop
+				:autoplay="{ delay: 4000 }"
+				:items="carouselImages"
+				class="w-full h-full"
+				:ui="{
+					container: 'h-full',
+					item: 'h-full',
+					prev: 'sm:start-4',
+					next: 'sm:end-4'
+				}"
+			>
+				<DirectusImage
+					:uuid="item"
+					:alt="data.tagline || data.headline || 'Hero Image'"
+					:fill="true"
+					:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
+					class="object-contain"
+					:data-directus="
+						setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'], mode: 'modal' })
+					"
+				/>
+			</UCarousel>
 		</div>
 	</section>
 </template>
