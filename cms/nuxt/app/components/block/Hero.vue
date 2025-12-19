@@ -52,11 +52,9 @@ const carouselImages = computed(() => {
 		const images = props.data.images_multi
 			.map((item: any) => item.directus_files_id?.id)
 			.filter((id: string | undefined) => id !== undefined);
-		console.log('Carousel images:', images, 'Count:', images.length);
 		return images;
 	}
 	const fallback = props.data.image ? [props.data.image] : [];
-	console.log('Using fallback image:', fallback);
 	return fallback;
 });
 </script>
@@ -114,61 +112,16 @@ const carouselImages = computed(() => {
 				'md:w-1/2 h-[562px]': data.layout !== 'image_center',
 			}"
 		>
-			<ClientOnly>
-				<UCarousel
-					v-if="carouselImages.length > 1"
-					v-slot="{ item }"
-					fade
-					arrows
-					dots
-					loop
-					:autoplay="{ delay: 2500, stopOnInteraction: false }"
-					:items="carouselImages"
-					class="w-full h-full"
-					:ui="{
-						container: 'h-full',
-						item: 'h-full',
-						prev: 'sm:start-4 !bg-white/80 dark:!bg-gray-800/80',
-						next: 'sm:end-4 !bg-white/80 dark:!bg-gray-800/80',
-						dots: '!-bottom-8',
-						dot: '!bg-gray-400 data-[state=active]:!bg-white'
-					}"
-				>
-					<DirectusImage
-						:uuid="item"
-						:alt="data.tagline || data.headline || 'Hero Image'"
-						:fill="true"
-						:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
-						class="object-contain"
-						:data-directus="
-							setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'], mode: 'modal' })
-						"
-					/>
-				</UCarousel>
-				<DirectusImage
-					v-else
-					:uuid="carouselImages[0]"
-					:alt="data.tagline || data.headline || 'Hero Image'"
-					:fill="true"
-					:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
-					class="object-contain"
-					:data-directus="
-						setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'], mode: 'modal' })
-					"
-				/>
-				<template #fallback>
-					<DirectusImage
-						:uuid="carouselImages[0]"
-						:alt="data.tagline || data.headline || 'Hero Image'"
-						:fill="true"
-						:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
-						class="object-contain"
-						:data-directus="
-							setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'], mode: 'modal' })
-						"
-					/>
-				</template>
-			</ClientOnly>
+			<DirectusImage
+				:uuid="carouselImages[0]"
+				:alt="translatedContent.tagline || translatedContent.headline || 'Hero Image'"
+				:fill="true"
+				:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
+				class="object-contain"
+				:data-directus="
+					setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'], mode: 'modal' })
+				"
+			/>
 		</div>
 	</section>
 </template>

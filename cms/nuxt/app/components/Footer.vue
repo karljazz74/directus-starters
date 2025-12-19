@@ -28,6 +28,11 @@ export interface FooterProps {
 const props = defineProps<FooterProps>();
 const runtimeConfig = useRuntimeConfig();
 
+// Filter out social links with undefined service or url
+const validSocialLinks = computed(() => {
+	return props.globals.social_links?.filter(social => social.service && social.url) || [];
+});
+
 // Using template ref to expose the footer to the layout for visual editing
 const footerRef = useTemplateRef('footerRef');
 defineExpose({ footerRef });
@@ -66,9 +71,9 @@ const darkLogoUrl = computed(() =>
 					</p>
 
 					<!-- Social Links -->
-					<div v-if="props.globals.social_links?.length" class="mt-4 flex space-x-4">
+					<div v-if="validSocialLinks.length" class="mt-4 flex space-x-4">
 						<a
-							v-for="social in props.globals.social_links"
+							v-for="social in validSocialLinks"
 							:key="social.service"
 							:href="social.url"
 							target="_blank"

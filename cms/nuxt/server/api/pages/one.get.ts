@@ -27,7 +27,16 @@ const pageFields = [
 			{
 				// Different block types with their specific fields:
 				item: {
-					block_richtext: ['id', 'tagline', 'headline', 'content', 'alignment'],
+					block_richtext: [
+						'id',
+						'tagline',
+						'headline',
+						'content',
+						'alignment',
+						{
+							translations: ['languages_code', 'tagline', 'headline', 'content'],
+						},
+					],
 					block_gallery: ['id', 'tagline', 'headline', { items: ['id', 'directus_file', 'sort'] }],
 					block_pricing: [
 						'id',

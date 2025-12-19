@@ -9,16 +9,36 @@ interface RichTextProps {
 		content?: string;
 		alignment?: 'left' | 'center' | 'right';
 		className?: string;
+		translations?: Array<{
+			languages_code: string;
+			tagline: string;
+			headline: string;
+			content: string;
+		}>;
 	};
 }
 
-withDefaults(defineProps<RichTextProps>(), {
+const props = withDefaults(defineProps<RichTextProps>(), {
 	data: () => ({
 		alignment: 'left',
 	}),
 });
 
 const { setAttr } = useVisualEditing();
+
+// Get current language - must use the same useState key as LanguageSelector
+const locale = useState<string>('locale', () => 'en-US');
+
+// Compute translated content based on selected language
+const translatedContent = computed(() => {
+	const translation = props.data.translations?.find((t) => t.languages_code === locale.value);
+	
+	return {
+		tagline: translation?.tagline || props.data.tagline,
+		headline: translation?.headline || props.data.headline,
+		content: translation?.content || props.data.content,
+	};
+});
 </script>
 
 <template>
@@ -34,8 +54,8 @@ const { setAttr } = useVisualEditing();
 		]"
 	>
 		<Tagline
-			v-if="data.tagline"
-			:tagline="data.tagline"
+			v-if="translatedContent.tagline"
+			:tagline="translatedContent.tagline"
 			:data-directus="
 				setAttr({
 					collection: 'block_richtext',
@@ -46,8 +66,8 @@ const { setAttr } = useVisualEditing();
 			"
 		/>
 		<Headline
-			v-if="data.headline"
-			:headline="data.headline"
+			v-if="translatedContent.headline"
+			:headline="translatedContent.headline"
 			:data-directus="
 				setAttr({
 					collection: 'block_richtext',
@@ -58,8 +78,8 @@ const { setAttr } = useVisualEditing();
 			"
 		/>
 		<Text
-			v-if="data.content"
-			:content="data.content"
+			v-if="translatedContent.content"
+			:content="translatedContent.content"
 			:data-directus="
 				setAttr({
 					collection: 'block_richtext',

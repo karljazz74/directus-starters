@@ -1,11 +1,11 @@
 <script setup lang="ts">
 const LOCALES = [
-	{ code: 'en-US', name: 'English', flag: '🇺🇸' },
-	{ code: 'de-DE', name: 'German', flag: '🇩🇪' },
-	{ code: 'es-ES', name: 'Spanish', flag: '🇲🇽' },
-	{ code: 'fr-FR', name: 'French', flag: '🇫🇷' },
-	{ code: 'it-IT', name: 'Italian', flag: '🇮🇹' },
-	{ code: 'pt-BR', name: 'Portuguese', flag: '🇧🇷' },
+	{ code: 'en-US', name: 'English', flag: 'circle-flags:us' },
+	{ code: 'de-DE', name: 'German', flag: 'circle-flags:de' },
+	{ code: 'es-ES', name: 'Spanish', flag: 'circle-flags:mx' },
+	{ code: 'fr-FR', name: 'French', flag: 'circle-flags:fr' },
+	{ code: 'it-IT', name: 'Italian', flag: 'circle-flags:it' },
+	{ code: 'pt-BR', name: 'Portuguese', flag: 'circle-flags:br' },
 ];
 
 const locale = useState<string>('locale', () => 'en-US');
@@ -43,7 +43,7 @@ onMounted(() => {
 			class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
 			aria-label="Select language"
 		>
-			<span class="text-lg">{{ currentLanguage?.flag || '🌐' }}</span>
+			<Icon :name="currentLanguage?.flag || 'heroicons:globe-alt'" class="w-5 h-5" />
 			<span class="hidden sm:inline">{{ currentLanguage?.name || 'Language' }}</span>
 			<svg
 				class="w-4 h-4 transition-transform"
@@ -78,7 +78,7 @@ onMounted(() => {
 							'bg-gray-100 dark:bg-gray-700 font-semibold': lang.code === locale,
 						}"
 					>
-						<span class="text-lg">{{ lang.flag }}</span>
+						<Icon :name="lang.flag" class="w-5 h-5" />
 						<span>{{ lang.name }}</span>
 					</button>
 				</div>
