@@ -105,5 +105,5 @@ export default defineNuxtConfig({
 	},
 
 	compatibilityDate: '2025-01-16',
-	// Force Railway rebuild
+	// Build: force rebuild with env vars
 });
