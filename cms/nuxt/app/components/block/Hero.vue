@@ -106,13 +106,40 @@ const carouselImages = computed(() => {
 
 		<div
 			v-if="carouselImages.length > 0"
-			class="relative w-full"
+			class="relative w-full overflow-hidden"
 			:class="{
 				'md:w-3/4 xl:w-2/3 h-[400px]': data.layout === 'image_center',
 				'md:w-1/2 h-[562px]': data.layout !== 'image_center',
 			}"
 		>
+			<Carousel
+				v-if="carouselImages.length > 1"
+				:value="carouselImages"
+				:numVisible="1"
+				:numScroll="1"
+				:showNavigators="true"
+				:showIndicators="true"
+				circular
+				:autoplayInterval="3000"
+				class="h-full"
+			>
+				<template #item="slotProps">
+					<div class="flex items-center justify-center h-full w-full">
+						<DirectusImage
+							:uuid="slotProps.data"
+							:alt="translatedContent.tagline || translatedContent.headline || 'Hero Image'"
+							:fill="true"
+							:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
+							class="object-contain max-h-full"
+							:data-directus="
+								setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'], mode: 'modal' })
+							"
+						/>
+					</div>
+				</template>
+			</Carousel>
 			<DirectusImage
+				v-else
 				:uuid="carouselImages[0]"
 				:alt="translatedContent.tagline || translatedContent.headline || 'Hero Image'"
 				:fill="true"
@@ -125,3 +152,76 @@ const carouselImages = computed(() => {
 		</div>
 	</section>
 </template>
+
+<style scoped>
+/* Constrain carousel height */
+:deep(.p-carousel) {
+	height: 100%;
+}
+
+:deep(.p-carousel-content-container) {
+	height: 100%;
+}
+
+:deep(.p-carousel-content) {
+	height: 100%;
+}
+
+:deep(.p-carousel-viewport) {
+	height: 100%;
+}
+
+:deep(.p-carousel-item-list) {
+	height: 100%;
+}
+
+:deep(.p-carousel-item) {
+	height: 100%;
+}
+
+/* Make carousel indicators round */
+:deep(.p-carousel-indicator-button) {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+}
+
+/* Position indicators higher */
+:deep(.p-carousel-indicator-list) {
+	margin-top: -40px;
+	position: relative;
+	z-index: 10;
+}
+
+/* Center navigation arrows vertically and make both visible */
+:deep(.p-carousel-prev-button),
+:deep(.p-carousel-next-button) {
+	position: absolute !important;
+	top: 50% !important;
+	transform: translateY(-50%) !important;
+	background: rgba(255, 255, 255, 0.7) !important;
+	border-radius: 50% !important;
+	width: 48px !important;
+	height: 48px !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+	z-index: 20 !important;
+	opacity: 1 !important;
+	visibility: visible !important;
+}
+
+:deep(.p-carousel-prev-button) {
+	left: 1rem !important;
+}
+
+:deep(.p-carousel-next-button) {
+	right: 1rem !important;
+}
+
+:deep(.p-carousel-prev-button:hover),
+:deep(.p-carousel-next-button:hover) {
+	background: rgba(255, 255, 255, 0.9) !important;
+}
+</style>

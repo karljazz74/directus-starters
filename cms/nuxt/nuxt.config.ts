@@ -1,3 +1,5 @@
+import Aura from '@primeuix/themes/aura';
+
 export default defineNuxtConfig({
 	components: [
 		{ path: '~/components', pathPrefix: false },
@@ -23,6 +25,7 @@ export default defineNuxtConfig({
 		'@nuxt/icon',
 		'@nuxtjs/color-mode',
 		'@nuxtjs/seo',
+		'@primevue/nuxt-module',
 	],
 
 	css: ['~/assets/css/tailwind.css'],
@@ -91,6 +94,14 @@ export default defineNuxtConfig({
 
 	sitemap: {
 		sources: ['/api/sitemap'],
+	},
+
+	primevue: {
+		options: {
+			theme: {
+				preset: Aura,
+			},
+		},
 	},
 
 	compatibilityDate: '2025-01-16',
