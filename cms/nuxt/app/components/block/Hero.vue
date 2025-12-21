@@ -112,21 +112,39 @@ const carouselImages = computed(() => {
 				'md:w-1/2 h-[562px]': data.layout !== 'image_center',
 			}"
 		>
-			<Carousel
-				v-if="carouselImages.length > 1"
-				:value="carouselImages"
-				:numVisible="1"
-				:numScroll="1"
-				:showNavigators="true"
-				:showIndicators="true"
-				circular
-				:autoplayInterval="3000"
-				class="h-full"
-			>
-				<template #item="slotProps">
+			<ClientOnly v-if="carouselImages.length > 1">
+				<template #default>
+					<Carousel
+						:value="carouselImages"
+						:numVisible="1"
+						:numScroll="1"
+						:showNavigators="true"
+						:showIndicators="true"
+						circular
+						:autoplayInterval="3000"
+						class="h-full"
+					>
+						<template #item="slotProps">
+							<div class="flex items-center justify-center h-full w-full">
+								<DirectusImage
+									:uuid="slotProps.data"
+									:alt="translatedContent.tagline || translatedContent.headline || 'Hero Image'"
+									:fill="true"
+									:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
+									class="object-contain max-h-full"
+									:data-directus="
+										setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'], mode: 'modal' })
+									"
+								/>
+							</div>
+						</template>
+					</Carousel>
+				</template>
+				<template #fallback>
+					<!-- Show first image while carousel loads -->
 					<div class="flex items-center justify-center h-full w-full">
 						<DirectusImage
-							:uuid="slotProps.data"
+							:uuid="carouselImages[0]"
 							:alt="translatedContent.tagline || translatedContent.headline || 'Hero Image'"
 							:fill="true"
 							:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
@@ -137,7 +155,7 @@ const carouselImages = computed(() => {
 						/>
 					</div>
 				</template>
-			</Carousel>
+			</ClientOnly>
 			<DirectusImage
 				v-else
 				:uuid="carouselImages[0]"
