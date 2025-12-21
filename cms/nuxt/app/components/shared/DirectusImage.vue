@@ -14,9 +14,9 @@ const props = withDefaults(defineProps<DirectusImageProps>(), {
 	preset: '800w',
 });
 
-const src = useDirectusAsset(props.uuid, props.preset);
+const src = computed(() => useDirectusAsset(props.uuid, props.preset));
 </script>
 
 <template>
-	<img :src="src.value" v-bind="{ ...props, uuid: undefined }" />
+	<img :src="src" v-bind="{ ...props, uuid: undefined }" />
 </template>
