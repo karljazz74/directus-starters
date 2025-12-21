@@ -10,7 +10,10 @@ export function useDirectusAsset(fileOrString: string | DirectusFile | null | un
 	const directusUrl = runtimeConfig.public.directusUrl;
 
 	if (!directusUrl) {
-		console.error('directusUrl is not defined in runtimeConfig.public');
+		console.error('[useDirectusAsset] directusUrl is not defined in runtimeConfig.public');
+		if (import.meta.client) {
+			console.error('[useDirectusAsset] Available config keys:', Object.keys(runtimeConfig.public));
+		}
 		return '';
 	}
 
