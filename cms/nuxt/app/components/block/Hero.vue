@@ -106,32 +106,42 @@ const carouselImages = computed(() => {
 
 		<div
 			v-if="carouselImages.length > 0"
-			class="relative w-full overflow-hidden"
+			class="relative w-full"
+			:style="{
+				height: data.layout === 'image_center' ? '400px' : '562px',
+				maxHeight: data.layout === 'image_center' ? '400px' : '562px',
+				overflow: 'hidden'
+			}"
 			:class="{
-				'md:w-3/4 xl:w-2/3 h-[400px]': data.layout === 'image_center',
-				'md:w-1/2 h-[562px]': data.layout !== 'image_center',
+				'md:w-3/4 xl:w-2/3': data.layout === 'image_center',
+				'md:w-1/2': data.layout !== 'image_center',
 			}"
 		>
-			<ClientOnly v-if="carouselImages.length > 1">
-				<template #default>
-					<Carousel
-						:value="carouselImages"
-						:numVisible="1"
-						:numScroll="1"
-						:showNavigators="true"
-						:showIndicators="true"
-						circular
-						:autoplayInterval="3000"
-						class="h-full"
-					>
-						<template #item="slotProps">
-							<div class="flex items-center justify-center h-full w-full">
-								<DirectusImage
-									:uuid="slotProps.data"
-									:alt="translatedContent.tagline || translatedContent.headline || 'Hero Image'"
-									:fill="true"
-									:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
-									class="object-contain max-h-full"
+			<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden;">
+				<ClientOnly v-if="carouselImages.length > 1">
+					<template #default>
+						<Carousel
+							:value="carouselImages"
+							:numVisible="1"
+							:numScroll="1"
+							:showNavigators="true"
+							:showIndicators="true"
+							circular
+							:autoplayInterval="3000"
+							style="height: 100%; width: 100%;"
+							:pt="{
+								root: { style: 'height: 100%; overflow: hidden;' },
+								content: { style: 'height: 100%; overflow: hidden;' },
+								itemsContainer: { style: 'height: 100%; overflow: hidden;' }
+							}"
+						>
+							<template #item="slotProps">
+								<div class="flex items-center justify-center w-full" style="height: 100%; overflow: hidden;">
+									<DirectusImage
+										:uuid="slotProps.data"
+										:alt="translatedContent.tagline || translatedContent.headline || 'Hero Image'"
+										:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
+										style="max-height: 100%; max-width: 100%; object-fit: contain; height: auto; width: auto;"
 									:data-directus="
 										setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'], mode: 'modal' })
 									"
@@ -142,13 +152,12 @@ const carouselImages = computed(() => {
 				</template>
 				<template #fallback>
 					<!-- Show first image while carousel loads -->
-					<div class="flex items-center justify-center h-full w-full">
+					<div class="flex items-center justify-center w-full" style="height: 100%; max-height: 100%; overflow: hidden;">
 						<DirectusImage
 							:uuid="carouselImages[0]"
 							:alt="translatedContent.tagline || translatedContent.headline || 'Hero Image'"
-							:fill="true"
 							:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
-							class="object-contain max-h-full"
+							style="max-height: 100%; max-width: 100%; object-fit: contain; height: auto; width: auto;"
 							:data-directus="
 								setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'], mode: 'modal' })
 							"
@@ -160,41 +169,49 @@ const carouselImages = computed(() => {
 				v-else
 				:uuid="carouselImages[0]"
 				:alt="translatedContent.tagline || translatedContent.headline || 'Hero Image'"
-				:fill="true"
 				:sizes="data.layout === 'image_center' ? '100vw' : '(max-width: 768px) 100vw, 50vw'"
-				class="object-contain"
+				style="max-height: 100%; max-width: 100%; object-fit: contain; height: auto; width: auto;"
 				:data-directus="
 					setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'], mode: 'modal' })
 				"
 			/>
+			</div>
 		</div>
 	</section>
 </template>
 
 <style scoped>
-/* Constrain carousel height */
+/* Hide scrollbars completely - apply globally to this component */
+* {
+	scrollbar-width: none !important; /* Firefox */
+	-ms-overflow-style: none !important; /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+	display: none !important; /* Chrome, Safari, Opera */
+}
+
+/* Ensure carousel respects parent height */
 :deep(.p-carousel) {
 	height: 100%;
+	max-height: 100%;
 }
 
-:deep(.p-carousel-content-container) {
-	height: 100%;
-}
-
-:deep(.p-carousel-content) {
-	height: 100%;
-}
-
-:deep(.p-carousel-viewport) {
-	height: 100%;
-}
-
+:deep(.p-carousel-content-container),
+:deep(.p-carousel-viewport),
+:deep(.p-carousel-items-container),
+:deep(.p-carousel-content),
 :deep(.p-carousel-item-list) {
 	height: 100%;
+	max-height: 100%;
 }
 
 :deep(.p-carousel-item) {
 	height: 100%;
+	max-height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 /* Make carousel indicators round */
