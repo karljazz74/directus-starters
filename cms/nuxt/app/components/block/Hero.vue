@@ -106,7 +106,7 @@ const carouselImages = computed(() => {
 
 		<div
 			v-if="carouselImages.length > 0"
-			class="relative w-full"
+			class="relative w-full -mt-24"
 			:style="{
 				height: data.layout === 'image_center' ? '400px' : '562px',
 				maxHeight: data.layout === 'image_center' ? '400px' : '562px',
