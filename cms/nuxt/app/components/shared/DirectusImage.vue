@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { watch, ref, computed } from 'vue';
-
 interface DirectusImageProps {
 	uuid: string;
 	alt: string;
@@ -16,7 +14,7 @@ const props = withDefaults(defineProps<DirectusImageProps>(), {
 	preset: '800w',
 });
 
-const src = computed(() => useDirectusAsset(props.uuid, props.preset));
+const src = useDirectusAsset(props.uuid, props.preset);
 </script>
 
 <template>

@@ -1,19 +1,28 @@
-export function useDirectusAsset(fileOrString: string | DirectusFile | null | undefined, preset?: string): string {
-	if (!fileOrString) return '';
+import type { ComputedRef } from 'vue';
 
-	const runtimeConfig = useRuntimeConfig();
-	const directusUrl = runtimeConfig.public.directusUrl;
+interface DirectusFile {
+	id: string;
+	[key: string]: any;
+}
 
-	if (!directusUrl) {
-		console.error('directusUrl is not defined in runtimeConfig.public');
-		return '';
-	}
+export function useDirectusAsset(fileOrString: string | DirectusFile | null | undefined, preset?: string): ComputedRef<string> {
+	return computed(() => {
+		if (!fileOrString) return '';
 
-	const presetParam = preset ? `?key=${preset}` : '';
+		const runtimeConfig = useRuntimeConfig();
+		const directusUrl = runtimeConfig.public.directusUrl;
 
-	if (typeof fileOrString === 'string') {
-		return `${directusUrl}/assets/${fileOrString}${presetParam}`;
-	}
+		if (!directusUrl) {
+			console.error('directusUrl is not defined in runtimeConfig.public');
+			return '';
+		}
 
-	return `${directusUrl}/assets/${fileOrString.id}${presetParam}`;
+		const presetParam = preset ? `?key=${preset}` : '';
+
+		if (typeof fileOrString === 'string') {
+			return `${directusUrl}/assets/${fileOrString}${presetParam}`;
+		}
+
+		return `${directusUrl}/assets/${fileOrString.id}${presetParam}`;
+	});
 }
